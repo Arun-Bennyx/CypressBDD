@@ -11,7 +11,10 @@ module.exports = defineConfig({
   e2e: {
     baseUrl: 'https://opensource-demo.orangehrmlive.com',
     specPattern: 'cypress/e2e/features/**/*.feature',
-    stepDefinitions: 'cypress/e2e/step_definitions/**/*.js',
+    fixturesFolder: 'cypress/fixtures/data',
+    env: {
+      stepDefinitions: 'cypress/e2e/step_definitions/*.{js,ts}',
+    },
     async setupNodeEvents(on, config) {
       await addCucumberPreprocessorPlugin(on, config);
       on(
@@ -22,10 +25,5 @@ module.exports = defineConfig({
       );
       return config;
     },
-  },
-  // Add cucumberPreprocessor configuration
-  cucumberPreprocessor: {
-    nonGlobalStepDefinitions: false,
-    stepDefinitions: 'cypress/e2e/step_definitions/**/*.js',
   },
 });
