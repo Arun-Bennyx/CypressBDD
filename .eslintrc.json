@@ -1,0 +1,7 @@
+{
+  "extends": ["plugin:cypress/recommended", "prettier"],
+  "rules": {
+    "semi": ["error", "always"],
+    "quotes": ["error", "single"]
+  }
+}
