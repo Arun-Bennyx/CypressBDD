@@ -1,10 +1,10 @@
 name: Cypress CI/CD with Environment Promotions
 
 on:
-  pull_request:
-    branches: [main]
   push:
-    branches: [main]
+    branches:
+      - main # Only trigger on push (merge) to main branch
+  # No pull_request trigger, so no tests run on PR creation or update
 
 jobs:
   run-dev-tests:
@@ -27,7 +27,7 @@ jobs:
       - name: Run Cypress tests on Dev
         run: npx cypress run
         env:
-          BASE_URL: https://opensource-demo.orangehrmlive.com
+          BASE_URL: https://opensource-demo.orangehrmlive.com # Your dev environment URL
 
   approve-qa:
     name: Approve QA Promotion
@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: qa
-      url: https://opensource-demo.orangehrmlive.com
+      url: https://opensource-demo.orangehrmlive.com # Your QA environment URL
 
     steps:
       - name: Run Cypress tests on QA
@@ -49,7 +49,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: stage
-      url: https://opensource-demo.orangehrmlive.com
+      url: https://opensource-demo.orangehrmlive.com # Your Stage environment URL
 
     steps:
       - name: Run Cypress tests on Stage
