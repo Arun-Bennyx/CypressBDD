@@ -1,0 +1,58 @@
+name: Cypress CI/CD with Environment Promotions
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  run-dev-tests:
+    name: Run Cypress Tests on Dev
+    runs-on: ubuntu-latest
+    environment: dev
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Cypress tests on Dev
+        run: npx cypress run
+        env:
+          BASE_URL: https://opensource-demo.orangehrmlive.com
+
+  approve-qa:
+    name: Approve QA Promotion
+    needs: run-dev-tests
+    runs-on: ubuntu-latest
+    environment:
+      name: qa
+      url: https://opensource-demo.orangehrmlive.com
+
+    steps:
+      - name: Run Cypress tests on QA
+        run: npx cypress run
+        env:
+          BASE_URL: https://opensource-demo.orangehrmlive.com
+
+  approve-stage:
+    name: Approve Stage Promotion
+    needs: approve-qa
+    runs-on: ubuntu-latest
+    environment:
+      name: stage
+      url: https://opensource-demo.orangehrmlive.com
+
+    steps:
+      - name: Run Cypress tests on Stage
+        run: npx cypress run
+        env:
+          BASE_URL: https://opensource-demo.orangehrmlive.com
