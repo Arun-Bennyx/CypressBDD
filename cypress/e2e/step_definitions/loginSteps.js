@@ -26,3 +26,23 @@ Then('I should see the dashboard', () => {
 Then('I should see {string} error', (message) => {
   loginPage.elements.error().should('be.visible').and('have.text', message);
 });
+
+When('I enter {string} and {string}', (username, password) => {
+  if (username) {
+    loginPage.elements.username().type(username);
+  }
+  if (password) {
+    loginPage.elements.password().type(password);
+  }
+});
+
+When('I press Login button', () => {
+  loginPage.elements.submit().click();
+});
+
+Then('I should see {string} message', (errorMessage) => {
+  loginPage.elements
+    .fieldValidationError()
+    .should('be.visible')
+    .and('have.text', errorMessage);
+});
