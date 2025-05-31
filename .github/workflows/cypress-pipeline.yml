@@ -29,31 +29,30 @@ jobs:
         env:
           BASE_URL: https://opensource-demo.orangehrmlive.com # Your dev environment URL
 
+  approve-qa:
+    name: Approve QA Promotion
+    needs: run-dev-tests
+    runs-on: ubuntu-latest
+    environment:
+      name: qa
+      url: https://opensource-demo.orangehrmlive.com # Your QA environment URL
 
-  # approve-qa:
-  #   name: Approve QA Promotion
-  #   needs: run-dev-tests
-  #   runs-on: ubuntu-latest
-  #   environment:
-  #     name: qa
-  #     url: https://opensource-demo.orangehrmlive.com # Your QA environment URL
+    steps:
+      - name: Run Cypress tests on QA
+        run: npx cypress run
+        env:
+          BASE_URL: https://opensource-demo.orangehrmlive.com
 
-  #   steps:
-  #     - name: Run Cypress tests on QA
-  #       run: npx cypress run
-  #       env:
-  #         BASE_URL: https://opensource-demo.orangehrmlive.com
+  approve-stage:
+    name: Approve Stage Promotion
+    needs: approve-qa
+    runs-on: ubuntu-latest
+    environment:
+      name: stage
+      url: https://opensource-demo.orangehrmlive.com # Your Stage environment URL
 
-  # approve-stage:
-  #   name: Approve Stage Promotion
-  #   needs: approve-qa
-  #   runs-on: ubuntu-latest
-  #   environment:
-  #     name: stage
-  #     url: https://opensource-demo.orangehrmlive.com # Your Stage environment URL
-
-  #   steps:
-  #     - name: Run Cypress tests on Stage
-  #       run: npx cypress run
-  #       env:
-  #         BASE_URL: https://opensource-demo.orangehrmlive.com
+    steps:
+      - name: Run Cypress tests on Stage
+        run: npx cypress run
+        env:
+          BASE_URL: https://opensource-demo.orangehrmlive.com
